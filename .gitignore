@@ -1,4 +1,8 @@
-exports
+export
 build
 dist
 .DS_Store
+node_modules/
+assets/ocr/
+.test-dist/
+*.tsbuildinfo

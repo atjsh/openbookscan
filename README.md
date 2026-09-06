@@ -1,2 +1,3 @@
 # openbookscan
-Non-destructive book scanning with open source (V)LLMs
+
+openbookscan lets you create ePUB from photos of your books.
