@@ -1,6 +1,6 @@
-import type { Metadata } from '@openbookscan/epub';
+import type { Book, ImageResource, Metadata } from '@openbookscan/epub';
 
-export type { Metadata } from '@openbookscan/epub';
+export type { Book, ImageResource, Metadata } from '@openbookscan/epub';
 export type PageMode = 'auto' | 'text' | 'image';
 export interface ConversionConfig {
   metadata: Metadata;
@@ -41,7 +41,14 @@ export interface Progress {
 export interface ConversionOptions {
   signal?: AbortSignal;
   onProgress?: (progress: Progress) => void;
+  /** Synchronous observer; image bytes are borrowed and must not be modified. */
+  onPreview?: (preview: PreviewEvent) => void;
 }
+export type PreviewEvent =
+  /** Provisional page content, emitted in completion order before book-wide cleanup. */
+  | { type: 'page'; page: number; content: string; images: ImageResource[] }
+  /** Final content, emitted once after successful EPUB assembly. */
+  | { type: 'book'; book: Book };
 export interface ConversionReport {
   pageCount: number;
   pages: PageReport[];

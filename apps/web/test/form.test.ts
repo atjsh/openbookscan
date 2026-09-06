@@ -219,31 +219,17 @@ test('model selection accepts only Fast or Best and is independent of book JSON'
   assert.equal('model' in config, false);
 });
 
-test('download URLs preserve bytes and are revoked on replacement and cleanup', async () => {
-  const link = {
-    hidden: true,
-    href: '',
-    download: '',
-    removeAttribute() {
-      this.href = '';
-    },
-  };
-  const download = createDownload(link as unknown as HTMLAnchorElement);
-  assert.equal(download.show(new Uint8Array([1, 2, 3]), 'Book.pdf'), 3);
-  assert.equal(link.download, 'Book.epub');
-  assert.equal(link.hidden, false);
-  const previous = link.href;
-  const response = await fetch(previous);
+test('download URLs preserve bytes and disposal is idempotent', async () => {
+  const download = createDownload(new Uint8Array([1, 2, 3]), 'Book.pdf');
+  assert.equal(download.size, 3);
+  assert.equal(download.filename, 'Book.epub');
+  const response = await fetch(download.url);
   assert.equal(response.headers.get('content-type'), 'application/epub+zip');
   assert.deepEqual(
     new Uint8Array(await response.arrayBuffer()),
     new Uint8Array([1, 2, 3]),
   );
-  download.show(new Uint8Array([4]), 'Next.pdf');
-  await assert.rejects(fetch(previous));
-  const current = link.href;
-  download.clear();
-  assert.equal(link.hidden, true);
-  assert.equal(link.href, '');
-  await assert.rejects(fetch(current));
+  download.dispose();
+  download.dispose();
+  await assert.rejects(fetch(download.url));
 });

@@ -7,8 +7,14 @@
     "types": ["vite/client"],
     "noEmit": true,
     "composite": true,
-    "tsBuildInfoFile": ".cache/app.tsbuildinfo"
+    "tsBuildInfoFile": ".cache/app.tsbuildinfo",
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact"
   },
-  "include": ["src/**/*.ts"],
-  "references": [{ "path": "../../packages/pdf-to-epub" }]
+  "include": ["src"],
+  "references": [
+    {
+      "path": "../../packages/pdf-to-epub"
+    }
+  ]
 }

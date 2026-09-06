@@ -1,7 +1,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { convertPdf } from '../src/convert.js';
-import type { ConversionAdapter, OCRData, Progress } from '../src/types.js';
+import type {
+  ConversionAdapter,
+  OCRData,
+  Progress,
+  PreviewEvent,
+} from '../src/types.js';
 import { config, png } from './fixtures.js';
 
 function adapter(count = 2) {
@@ -211,8 +216,10 @@ function controlledRuntime(
 test('bounded pipeline completes OCR out of order with one rendered lookahead and ordered results', async () => {
   const { runtime, calls, jobs } = controlledRuntime(5, 2);
   const progress: Progress[] = [];
+  const previews: PreviewEvent[] = [];
   const result = convertPdf(new Uint8Array(), config, runtime, {
     onProgress: (event) => progress.push(event),
+    onPreview: (event) => previews.push(event),
   });
   await turn();
   assert.deepEqual(calls.rendered, [1, 2, 3]);
@@ -250,6 +257,14 @@ test('bounded pipeline completes OCR out of order with one rendered lookahead an
     output.report.pages.map((page) => page.page),
     [1, 2, 3, 4, 5],
   );
+  assert.deepEqual(
+    previews
+      .filter((event) => event.type === 'page')
+      .map((event) => event.page),
+    [2, 3, 4, 5, 1],
+  );
+  assert.equal(previews.at(-1)!.type, 'book');
+  assert.equal(previews.filter((event) => event.type === 'book').length, 1);
   assert.equal(output.report.workers, 2);
   assert.equal(calls.renderMax, 1);
   assert.equal(calls.ocrMax, 2);

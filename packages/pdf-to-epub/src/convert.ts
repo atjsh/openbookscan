@@ -2,6 +2,7 @@ import { assembleEpub } from '@openbookscan/epub';
 import { aborted, wait } from './cancellation.js';
 import { validateConfig } from './config.js';
 import { reconstruct } from './content/chapters.js';
+import { previewPage } from './content/preview.js';
 import { classifyPage } from './ocr/classify.js';
 import { normalizeOCR } from './ocr/normalize.js';
 import { conversionReport } from './report.js';
@@ -20,7 +21,7 @@ export async function convertPdf(
   bytes: Uint8Array,
   config: ConversionConfig,
   adapter: ConversionAdapter,
-  { signal, onProgress = () => {} }: ConversionOptions = {},
+  { signal, onProgress = () => {}, onPreview }: ConversionOptions = {},
 ): Promise<ConversionResult> {
   validateConfig(config);
   aborted(signal);
@@ -126,6 +127,14 @@ export async function convertPdf(
         completed,
       });
       check();
+      if (onPreview) {
+        const preview = await measure('cleanup', () =>
+          previewPage(pages[number - 1]),
+        );
+        check();
+        onPreview(preview);
+        check();
+      }
     };
     try {
       for (let number = 1; number <= count; number++) {
@@ -188,6 +197,8 @@ export async function convertPdf(
     const epub = await measure('package', () =>
       assembleEpub(book, { signal: controller.signal }),
     );
+    check();
+    onPreview?.({ type: 'book', book });
     check();
     return {
       epub,
