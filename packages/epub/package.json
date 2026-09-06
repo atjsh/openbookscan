@@ -1,0 +1,49 @@
+{
+  "name": "@openbookscan/epub",
+  "version": "0.1.0",
+  "description": "In-memory EPUB assembly and declarative chapter rendering",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/assemble.d.ts",
+      "import": "./dist/assemble.js"
+    },
+    "./node": {
+      "types": "./dist/assemble.d.ts",
+      "import": "./dist/assemble.js"
+    },
+    "./browser": {
+      "types": "./dist/assemble.d.ts",
+      "import": "./dist/assemble.js"
+    },
+    "./render": {
+      "types": "./dist/render.d.ts",
+      "import": "./dist/render.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -b && tsc -p tsconfig.test.json --noEmit",
+    "test": "npm run build && tsc -p tsconfig.test.json && node --test .test-dist/test/*.test.js"
+  },
+  "dependencies": {
+    "epub-gen-memory": "1.1.2",
+    "preact": "10.29.8",
+    "preact-render-to-string": "6.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.1",
+    "jszip": "3.10.1",
+    "typescript": "6.0.3"
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}
