@@ -112,19 +112,22 @@
       <p>Secure, private, and most importantly, no cost.</p>
       <form id="convert-form">
         <fieldset id="inputs">
-          <legend>Book</legend>
-          <p>
-            <label
-              >PDF
-              <input
-                name="pdf"
-                type="file"
-                accept=".pdf,application/pdf"
-                required
-            /></label>
-          </p>
+          <legend>Convert Book</legend>
+          <fieldset id="source">
+            <legend>Source</legend>
+            <p>
+              <label
+                >PDF
+                <input
+                  name="pdf"
+                  type="file"
+                  accept=".pdf,application/pdf"
+                  required
+              /></label>
+            </p>
+          </fieldset>
           <fieldset id="metadata">
-            <legend>Details</legend>
+            <legend>ePUB Settings</legend>
             <p>
               <label>Title <input name="title" required /></label>
             </p>
@@ -133,38 +136,60 @@
             </p>
             <p>
               <label
-                >Language <input name="language" value="en" required
+                >Book language
+                <input name="language" list="book-languages" required
               /></label>
+              <datalist id="book-languages"></datalist>
+            </p>
+            <p style="display: none">
+              <label
+                >Configuration JSON (optional)
+                <input
+                  name="config"
+                  type="file"
+                  accept=".json,application/json"
+              /></label>
+              (<a href="%BASE_URL%config.example.json" download>example</a>)
             </p>
           </fieldset>
-          <p style="display: none">
-            <label
-              >Configuration JSON (optional)
-              <input name="config" type="file" accept=".json,application/json"
-            /></label>
-            (<a href="%BASE_URL%config.example.json" download>example</a>)
-          </p>
-          <p>
-            <label
-              >OCR model
-              <select name="model">
-                <option value="fast" selected>Fast</option>
-                <option value="best">Best</option>
-              </select></label
-            >
-          </p>
-          <p>
-            <label
-              >OCR workers
-              <input name="workers" list="worker-counts" value="auto" required
-            /></label>
-            <datalist id="worker-counts">
-              <option value="auto">Automatic</option>
-              <option value="1"></option>
-              <option value="2"></option>
-              <option value="4"></option>
-            </datalist>
-          </p>
+          <fieldset id="ocr-settings">
+            <legend>OCR Settings</legend>
+            <p>
+              <label
+                >OCR language
+                <input name="ocr-language" list="ocr-languages" required
+              /></label>
+              <datalist id="ocr-languages"></datalist>
+            </p>
+            <p>
+              <label
+                >OCR model
+                <select name="model">
+                  <option value="fast" selected>Fast</option>
+                  <option value="best">Best</option>
+                </select></label
+              >
+            </p>
+            <p>
+              <label
+                >OCR workers
+                <input
+                  name="workers"
+                  list="worker-counts"
+                  value="auto"
+                  required
+              /></label>
+              <datalist id="worker-counts">
+                <option value="auto">Automatic</option>
+                <option value="1"></option>
+                <option value="2"></option>
+                <option value="4"></option>
+              </datalist>
+            </p>
+          </fieldset>
+
+          <br />
+
           <button type="submit">Convert</button>
         </fieldset>
       </form>

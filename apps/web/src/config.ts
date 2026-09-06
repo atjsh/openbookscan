@@ -4,11 +4,13 @@ import {
 } from '@openbookscan/pdf-to-epub';
 import type { OcrModel } from './conversion/types.js';
 import type { WorkerSelection } from './conversion/workers.js';
+import { languages } from './languages.js';
 
 export interface BookDetails {
   title: string;
   author: string;
   language: string;
+  ocrLanguage: string;
 }
 
 export function titleFromFilename(filename: string): string {
@@ -33,6 +35,15 @@ export function parseModel(value: unknown): OcrModel {
   return value;
 }
 
+export function parseOcrLanguage(value: string): string {
+  const code = value.trim().toLowerCase();
+  if (!languages.some(([ocrCode]) => ocrCode === code))
+    throw new Error(
+      'Choose a supported OCR language code, such as eng or kor.',
+    );
+  return code;
+}
+
 export async function readConfiguration(
   details: BookDetails,
   file?: Pick<File, 'text'>,
@@ -40,6 +51,7 @@ export async function readConfiguration(
   const value: unknown = file
     ? JSON.parse(await file.text())
     : {
+        language: parseOcrLanguage(details.ocrLanguage),
         metadata: {
           title: details.title.trim(),
           author: details.author.trim(),

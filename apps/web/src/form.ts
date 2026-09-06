@@ -7,6 +7,7 @@ import {
 } from './config.js';
 import { createDownload } from './download.js';
 import { createPageProgress } from './progress.js';
+import { languageOptions } from './languages.js';
 
 export function initializeForm(document: Document): void {
   const form = document.querySelector<HTMLFormElement>('#convert-form')!;
@@ -18,12 +19,27 @@ export function initializeForm(document: Document): void {
   const field = (name: string) =>
     form.elements.namedItem(name) as HTMLInputElement;
   const workerInput = field('workers');
+  const ocrLanguageInput = field('ocr-language');
   const modelInput = form.elements.namedItem('model') as HTMLSelectElement;
   const download = createDownload(
     document.querySelector<HTMLAnchorElement>('#download')!,
   );
   let controller: AbortController | undefined;
   let suggestedTitle = '';
+
+  for (const kind of ['book', 'ocr'] as const) {
+    document
+      .querySelector<HTMLDataListElement>(`#${kind}-languages`)!
+      .replaceChildren(
+        ...languageOptions(kind).map(({ value, label }) => {
+          const option = document.createElement('option');
+          option.value = value;
+          option.label = label;
+          option.textContent = label;
+          return option;
+        }),
+      );
+  }
 
   field('pdf').addEventListener('change', () => {
     const filename = field('pdf').files?.[0]?.name;
@@ -35,6 +51,7 @@ export function initializeForm(document: Document): void {
   });
   field('config').addEventListener('change', () => {
     metadata.disabled = Boolean(field('config').files?.length);
+    ocrLanguageInput.disabled = metadata.disabled;
   });
   cancel.addEventListener('click', () => {
     if (!controller) return;
@@ -57,6 +74,7 @@ export function initializeForm(document: Document): void {
       title: field('title').value,
       author: field('author').value,
       language: field('language').value,
+      ocrLanguage: ocrLanguageInput.value,
     };
     controller = new AbortController();
     const { signal } = controller;
