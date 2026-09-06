@@ -96,85 +96,92 @@
     </style>
   </head>
   <body>
-    <h1>
-      <a
-        href="https://github.com/atjsh/openbookscan"
-        target="_blank"
-        rel="noopener noreferrer"
-        >openbookscan</a
-      >
-    </h1>
-    <form id="convert-form">
-      <fieldset id="inputs">
-        <legend>Book</legend>
-        <p>
-          <label
-            >PDF
-            <input
-              name="pdf"
-              type="file"
-              accept=".pdf,application/pdf"
-              required
-          /></label>
-        </p>
-        <fieldset id="metadata">
-          <legend>Details</legend>
+    <main>
+      <h1>
+        <a
+          href="https://github.com/atjsh/openbookscan"
+          target="_blank"
+          rel="noopener noreferrer"
+          >openbookscan</a
+        >
+      </h1>
+      <p>
+        openbookscan uses in-browser OCR(Optical Character Recognition)
+        technology to convert your book scans PDF into eBook (ePUB) format.
+      </p>
+      <p>Secure, private, and most importantly, no cost.</p>
+      <form id="convert-form">
+        <fieldset id="inputs">
+          <legend>Book</legend>
           <p>
-            <label>Title <input name="title" required /></label>
+            <label
+              >PDF
+              <input
+                name="pdf"
+                type="file"
+                accept=".pdf,application/pdf"
+                required
+            /></label>
           </p>
-          <p>
-            <label>Author <input name="author" required /></label>
+          <fieldset id="metadata">
+            <legend>Details</legend>
+            <p>
+              <label>Title <input name="title" required /></label>
+            </p>
+            <p>
+              <label>Author <input name="author" required /></label>
+            </p>
+            <p>
+              <label
+                >Language <input name="language" value="en" required
+              /></label>
+            </p>
+          </fieldset>
+          <p style="display: none">
+            <label
+              >Configuration JSON (optional)
+              <input name="config" type="file" accept=".json,application/json"
+            /></label>
+            (<a href="%BASE_URL%config.example.json" download>example</a>)
           </p>
           <p>
             <label
-              >Language <input name="language" value="en" required
-            /></label>
+              >OCR model
+              <select name="model">
+                <option value="fast" selected>Fast</option>
+                <option value="best">Best</option>
+              </select></label
+            >
           </p>
+          <p>
+            <label
+              >OCR workers
+              <input name="workers" list="worker-counts" value="auto" required
+            /></label>
+            <datalist id="worker-counts">
+              <option value="auto">Automatic</option>
+              <option value="1"></option>
+              <option value="2"></option>
+              <option value="4"></option>
+            </datalist>
+          </p>
+          <button type="submit">Convert</button>
         </fieldset>
-        <p style="display: none">
-          <label
-            >Configuration JSON (optional)
-            <input name="config" type="file" accept=".json,application/json"
-          /></label>
-          (<a href="%BASE_URL%config.example.json" download>example</a>)
-        </p>
+      </form>
+      <p><button id="cancel" type="button" disabled>Cancel</button></p>
+      <p id="status" role="status" aria-live="polite"></p>
+      <section id="page-progress" aria-label="Page conversion progress" hidden>
         <p>
-          <label
-            >OCR model
-            <select name="model">
-              <option value="fast" selected>Fast</option>
-              <option value="best">Best</option>
-            </select></label
-          >
+          <strong id="page-filename"></strong><br /><span
+            id="page-summary"
+          ></span>
         </p>
-        <p>
-          <label
-            >OCR workers
-            <input name="workers" list="worker-counts" value="auto" required
-          /></label>
-          <datalist id="worker-counts">
-            <option value="auto">Automatic</option>
-            <option value="1"></option>
-            <option value="2"></option>
-            <option value="4"></option>
-          </datalist>
-        </p>
-        <button type="submit">Convert</button>
-      </fieldset>
-    </form>
-    <p><button id="cancel" type="button" disabled>Cancel</button></p>
-    <p id="status" role="status" aria-live="polite"></p>
-    <section id="page-progress" aria-label="Page conversion progress" hidden>
-      <p>
-        <strong id="page-filename"></strong><br /><span
-          id="page-summary"
-        ></span>
-      </p>
-      <div id="page-grid" role="group" aria-label="PDF pages"></div>
-      <p id="page-legend" aria-label="Page status legend"></p>
-      <p id="page-detail"></p>
-    </section>
-    <a id="download" hidden>Download EPUB</a>
+        <div id="page-grid" role="group" aria-label="PDF pages"></div>
+        <p id="page-legend" aria-label="Page status legend"></p>
+        <p id="page-detail"></p>
+      </section>
+      <a id="download" hidden>Download EPUB</a>
+    </main>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
