@@ -1,0 +1,35 @@
+{
+  "name": "@openbookscan/pdf-to-epub",
+  "version": "0.1.0",
+  "description": "Local PDF rendering and OCR conversion to EPUB in Node and browsers",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -b && tsc -p tsconfig.test.json --noEmit",
+    "test": "npm run build && tsc -p tsconfig.test.json && node --test .test-dist/test/*.test.js"
+  },
+  "dependencies": {
+    "@openbookscan/epub": "0.1.0",
+    "preact": "10.29.8"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.1",
+    "typescript": "6.0.3"
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}
