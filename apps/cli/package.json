@@ -1,0 +1,41 @@
+{
+  "name": "@openbookscan/cli",
+  "version": "0.1.0",
+  "description": "Local PDF-to-EPUB command-line application",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "bin": {
+    "openbookscan": "./dist/main.js",
+    "openbookscan-setup-ocr": "./dist/setup-ocr.js"
+  },
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -b && npm rebuild @openbookscan/cli --ignore-scripts",
+    "typecheck": "tsc -b && tsc -p tsconfig.test.json --noEmit",
+    "test": "npm run build && tsc -p tsconfig.test.json && node --test .test-dist/test/*.test.js"
+  },
+  "dependencies": {
+    "@openbookscan/pdf-to-epub": "0.1.0",
+    "pdfjs-dist": "6.3.289",
+    "tesseract.js": "7.0.0",
+    "@napi-rs/canvas": "1.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.1",
+    "typescript": "6.0.3"
+  },
+  "exports": {
+    "./convert": {
+      "types": "./dist/conversion/convert.d.ts",
+      "import": "./dist/conversion/convert.js"
+    }
+  }
+}
