@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PDF to EPUB</title>
+    <style>
+      :root {
+        color-scheme: light;
+      }
+      body {
+        font-family:
+          -apple-system,
+          BlinkMacSystemFont,
+          avenir next,
+          avenir,
+          segoe ui,
+          helvetica neue,
+          helvetica,
+          Cantarell,
+          Ubuntu,
+          roboto,
+          noto,
+          arial,
+          sans-serif;
+      }
+
+      main {
+        max-width: 50rem;
+        padding: 2rem;
+        margin: auto;
+        min-height: 60vh;
+      }
+
+      h1 {
+        margin-bottom: 0.3em;
+      }
+
+      h2 {
+        font-weight: 500;
+      }
+
+      #page-filename {
+        overflow-wrap: anywhere;
+      }
+
+      #page-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, 24px);
+        gap: 3px;
+        max-height: 213px;
+        overflow-y: auto;
+        padding: 3px;
+      }
+
+      .page-marker {
+        display: inline-block;
+        box-sizing: border-box;
+        width: 24px;
+        height: 24px;
+        padding: 0;
+        font: inherit;
+        text-align: center;
+        color: #1f2328;
+      }
+
+      #page-legend > span {
+        display: inline-block;
+        margin-inline-end: 0.75em;
+      }
+
+      [data-state='pending'] {
+        background: #eff1f3;
+      }
+      [data-state='render'] {
+        background: #b6d9fa;
+      }
+      [data-state='render-complete'] {
+        background: #f3db83;
+      }
+      [data-state='ocr'] {
+        background: #d8c4f1;
+      }
+      [data-state='post-process'] {
+        background: #ffc699;
+      }
+      [data-state='page-complete'] {
+        background: #a6dfb5;
+      }
+      [data-state='failed'] {
+        background: #ffb6b2;
+      }
+      [data-state='stopped'] {
+        background: #c2c6cc;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>openbookscan</h1>
+    <form id="convert-form">
+      <fieldset id="inputs">
+        <legend>Book</legend>
+        <p>
+          <label
+            >PDF
+            <input
+              name="pdf"
+              type="file"
+              accept=".pdf,application/pdf"
+              required
+          /></label>
+        </p>
+        <fieldset id="metadata">
+          <legend>Details</legend>
+          <p>
+            <label>Title <input name="title" required /></label>
+          </p>
+          <p>
+            <label>Author <input name="author" required /></label>
+          </p>
+          <p>
+            <label
+              >Language <input name="language" value="en" required
+            /></label>
+          </p>
+        </fieldset>
+        <p style="display: none">
+          <label
+            >Configuration JSON (optional)
+            <input name="config" type="file" accept=".json,application/json"
+          /></label>
+          (<a href="%BASE_URL%config.example.json" download>example</a>)
+        </p>
+        <p>
+          <label
+            >OCR model
+            <select name="model">
+              <option value="fast" selected>Fast</option>
+              <option value="best">Best</option>
+            </select></label
+          >
+        </p>
+        <p>
+          <label
+            >OCR workers
+            <input name="workers" list="worker-counts" value="auto" required
+          /></label>
+          <datalist id="worker-counts">
+            <option value="auto">Automatic</option>
+            <option value="1"></option>
+            <option value="2"></option>
+            <option value="4"></option>
+          </datalist>
+        </p>
+        <button type="submit">Convert</button>
+      </fieldset>
+    </form>
+    <p><button id="cancel" type="button" disabled>Cancel</button></p>
+    <p id="status" role="status" aria-live="polite"></p>
+    <section id="page-progress" aria-label="Page conversion progress" hidden>
+      <p>
+        <strong id="page-filename"></strong><br /><span
+          id="page-summary"
+        ></span>
+      </p>
+      <div id="page-grid" role="group" aria-label="PDF pages"></div>
+      <p id="page-legend" aria-label="Page status legend"></p>
+      <p id="page-detail"></p>
+    </section>
+    <a id="download" hidden>Download EPUB</a>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

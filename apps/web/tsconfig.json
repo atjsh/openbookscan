@@ -1,0 +1,8 @@
+{
+  "files": [],
+  "references": [
+    { "path": "../../packages/pdf-to-epub" },
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "name": "@openbookscan/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "dev": "tsc -b && vite",
+    "build": "npm run typecheck && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -b && tsc -p tsconfig.test.json --noEmit",
+    "test": "tsc -b && tsc -p tsconfig.test.json && node --test .test-dist/test/*.test.js"
+  },
+  "dependencies": {
+    "@openbookscan/pdf-to-epub": "0.1.0",
+    "pdfjs-dist": "6.3.289",
+    "tesseract.js": "7.0.0",
+    "wasm-feature-detect": "1.9.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.1",
+    "ejs": "3.1.10",
+    "vite": "8.2.2",
+    "typescript": "6.0.3"
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}

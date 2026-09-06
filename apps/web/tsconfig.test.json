@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM"],
+    "types": ["node", "vite/client"],
+    "rootDir": ".",
+    "outDir": ".test-dist",
+    "declaration": false,
+    "composite": false
+  },
+  "include": ["test/**/*.ts", "src/config.ts", "src/download.ts"]
+}
