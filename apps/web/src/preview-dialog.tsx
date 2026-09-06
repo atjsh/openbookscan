@@ -86,13 +86,6 @@ export function PreviewDialog({
           <button autoFocus>Close</button>
         </form>
       </header>
-      <p id="preview-status" role="status">
-        {preview?.stopped
-          ? 'Incomplete — conversion stopped. These pages are provisional.'
-          : preview?.final
-            ? 'Final content'
-            : 'Provisional — text may change after book cleanup.'}
-      </p>
       <nav class="preview-navigation" aria-label="Preview navigation">
         <button
           type="button"
