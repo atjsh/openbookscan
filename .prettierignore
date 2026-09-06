@@ -1,0 +1,8 @@
+**/node_modules/
+**/build/
+**/dist/
+**/.test-dist/
+export/
+assets/ocr/
+*.tsbuildinfo
+package-lock.json

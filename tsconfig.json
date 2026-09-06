@@ -1,0 +1,9 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/epub" },
+    { "path": "packages/pdf-to-epub" },
+    { "path": "apps/cli" },
+    { "path": "apps/web" }
+  ]
+}

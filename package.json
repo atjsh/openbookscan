@@ -1,0 +1,37 @@
+{
+  "name": "openbookscan-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build:packages": "npm run build --workspace @openbookscan/cli",
+    "build": "npm run build:packages && npm run build --workspace @openbookscan/web",
+    "typecheck": "npm run build:packages && npm run typecheck --workspaces",
+    "test": "npm run build:packages && npm run test --workspaces",
+    "convert": "npm run build:packages --silent && node apps/cli/dist/main.js",
+    "setup:ocr": "npm run build:packages --silent && node apps/cli/dist/setup-ocr.js",
+    "dev": "npm run dev --workspace @openbookscan/web",
+    "build:web": "npm run build --workspace @openbookscan/web",
+    "preview": "npm run preview --workspace @openbookscan/web",
+    "lint": "eslint . --max-warnings=0",
+    "lint:fix": "eslint . --fix --max-warnings=0",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/node": "22.20.1",
+    "eslint": "10.10.0",
+    "prettier": "3.9.6",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.69.0"
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}
